@@ -1,0 +1,67 @@
+\documentclass[a4paper,addpoints]{article}
+\usepackage{amsfonts,amssymb,amsmath, amsthm}
+\usepackage{xcolor}
+\usepackage{pgf,tikz,pgfplots}
+\pgfplotsset{compat=1.15}
+\usepgfplotslibrary{fillbetween}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+\usetikzlibrary{calc}
+\usepackage{tabu}
+
+\usepackage{tikz}
+\usetikzlibrary {shapes , arrows , fit , calc, positioning}
+\tikzset{box/.style={draw, rectangle, rounded corners, thick, node distance =7 em, text width =6 em, text centered, minimum height =2.5 em}}
+\tikzset{line/.style={draw, thick, -latex'}}
+
+% Caricamento di tikz-uml e impostazioni di stile
+\usepackage{tikz-uml}
+\tikzumlset{actor below=0.4cm, fill usecase=white, fill class=white, text=black, draw=black}
+
+\begin{document}
+
+\begin{center}
+\begin{tikzpicture}
+    % Definizione del sistema con tutti i casi d'uso ordinati per riga/attore
+    \begin{umlsystem}[x=5, width=7.5cm]{Sistema Ghisa App}
+        % Casi d'uso per l'Utente Non Registrato
+        \umlusecase[x=0, y=0, name=visualizzazione, width=2.2cm]{Visualizzazione esercizi}
+        \umlusecase[x=4, y=0, name=filtraggio, width=2.2cm]{Filtraggio esercizi}
+        
+        % Casi d'uso per l'Utente Registrato
+        \umlusecase[x=0, y=-3, name=registrazione, width=2.2cm]{Registrazione account}
+        \umlusecase[x=2, y=-4.5, name=creazioneSchede, width=2.2cm]{Creazione schede}
+        \umlusecase[x=4, y=-3, name=gestioneCarichi, width=2.2cm]{Monitoraggio carichi}
+        
+        % Casi d'uso per l'Admin
+        \umlusecase[x=0, y=-7.5, name=caricamento, width=2.2cm]{Caricamento esercizi}
+        \umlusecase[x=2, y=-9, name=gestioneSchede, width=2.2cm]{Gestione sezione schede}
+        \umlusecase[x=4, y=-7.5, name=gestioneSezCarichi, width=2.2cm]{Gestione sezione carichi}
+    \end{umlsystem}
+        
+    % Definizione degli Attori posizionati verticalmente sulla sinistra
+    \umlactor[x=0, y=0]{Utente Non Registrato}
+    \umlactor[x=0, y=-3.5]{Utente Registrato}
+    \umlactor[x=0, y=-8]{Admin}
+
+    % Relazioni di ereditarietà tra gli attori
+    \umlinherit{Utente Non Registrato}{Utente Registrato}
+    \umlinherit{Utente Registrato}{Admin}
+    
+    % Associazioni Utente Non Registrato
+    \umlassoc{Utente Non Registrato}{visualizzazione}
+    \umlassoc{Utente Non Registrato}{filtraggio}
+    
+    % Associazioni Utente Registrato
+    \umlassoc{Utente Registrato}{registrazione}
+    \umlassoc{Utente Registrato}{creazioneSchede}
+    \umlassoc{Utente Registrato}{gestioneCarichi}
+        
+    % Associazioni Admin
+    \umlassoc{Admin}{caricamento}
+    \umlassoc{Admin}{gestioneSchede}
+    \umlassoc{Admin}{gestioneSezCarichi}
+\end{tikzpicture}
+\end{center}
+
+\end{document}

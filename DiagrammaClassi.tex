@@ -1,0 +1,159 @@
+\documentclass[a4paper,landscape]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel}
+\usepackage{tikz}
+\usetikzlibrary{
+    positioning,
+    arrows.meta,
+    shapes.multipart
+}
+
+\pagestyle{empty}
+
+\begin{document}
+
+\begin{center}
+\Large\textbf{Diagramma delle classi Ghisa App}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{center}
+\begin{tikzpicture}[
+    scale=0.82,
+    transform shape,
+    classe/.style={
+        draw,
+        rectangle split,
+        rectangle split parts=3,
+        rectangle split part align={center,left,left},
+        text width=3.6cm,
+        font=\small,
+        inner sep=5pt
+    },
+    relazione/.style={draw,thick},
+    eredita/.style={
+        draw,thick,
+        -{Triangle[open,length=9pt,width=8pt]}
+    }
+]
+
+% CLASSI
+
+\node[classe] (utente) at (0,0) {
+    \textbf{Utente}
+    \nodepart{second}
+    - idUtente : int
+    \nodepart{third}
+    + visualizzaEsercizi() : void\\
+    + filtraEsercizi() : void
+};
+
+\node[classe] (registrato) at (0,-5) {
+    \textbf{UtenteRegistrato}
+    \nodepart{second}
+    - nome : string\\
+    - email : string\\
+    - password : string
+    \nodepart{third}
+    + registrati() : void\\
+    + creaScheda() : void\\
+    + monitoraCarichi() : void
+};
+
+\node[classe] (admin) at (-6,-5) {
+    \textbf{Admin}
+    \nodepart{second}
+    - idAdmin : int
+    \nodepart{third}
+    + caricaEsercizio() : void\\
+    + gestisciCarichi() : void\\
+    + gestisciSchede() : void
+};
+
+\node[classe] (esercizio) at (7,0) {
+    \textbf{Esercizio}
+    \nodepart{second}
+    - idEsercizio : int\\
+    - nome : string\\
+    - descrizione : string\\
+    - gruppoMuscolare : string
+    \nodepart{third}
+    + visualizza() : void\\
+    + modifica() : void
+};
+
+\node[classe] (scheda) at (7,-5) {
+    \textbf{Scheda}
+    \nodepart{second}
+    - idScheda : int\\
+    - nome : string\\
+    - dataCreazione : date
+    \nodepart{third}
+    + aggiungiEsercizio() : void\\
+    + rimuoviEsercizio() : void\\
+    + modificaScheda() : void
+};
+
+\node[classe] (carico) at (7,-10) {
+    \textbf{Carico}
+    \nodepart{second}
+    - idCarico : int\\
+    - peso : double\\
+    - ripetizioni : int\\
+    - data : date
+    \nodepart{third}
+    + registraCarico() : void\\
+    + aggiornaCarico() : void\\
+    + visualizzaStorico() : void
+};
+
+% EREDITARIETA'
+
+\draw[eredita]
+(registrato.north) -- (utente.south);
+
+\draw[eredita]
+(admin.north) |- (-3,0) -- (utente.west);
+
+% ASSOCIAZIONI
+
+% Utente visualizza esercizi
+\draw[relazione]
+(utente.east) -- (esercizio.west)
+node[midway,above] {visualizza}
+node[pos=0.12,below] {0..*}
+node[pos=0.88,below] {0..*};
+
+% Utente registrato crea schede
+\draw[relazione]
+(registrato.east) -- (scheda.west)
+node[midway,above] {crea}
+node[pos=0.12,below] {1}
+node[pos=0.88,below] {0..*};
+
+% Scheda contiene esercizi
+\draw[relazione]
+(esercizio.south) -- (scheda.north)
+node[midway,right] {contiene}
+node[pos=0.15,left] {0..*}
+node[pos=0.85,left] {1..*};
+
+% Scheda registra carichi
+\draw[relazione]
+(scheda.south) -- (carico.north)
+node[midway,right] {registra}
+node[pos=0.15,left] {1}
+node[pos=0.85,left] {0..*};
+
+% Utente registrato monitora carichi
+\draw[relazione]
+(registrato.south) |- (carico.west)
+node[pos=0.25,left] {monitora};
+
+\end{tikzpicture}
+\end{center}
+
+\end{document}
